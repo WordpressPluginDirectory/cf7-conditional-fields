@@ -1,7 +1,7 @@
 <?php
 
-if (!defined('WPCF7CF_VERSION')) define( 'WPCF7CF_VERSION', '2.5.1' );
-if (!defined('WPCF7CF_CF7_MAX_VERSION')) define( 'WPCF7CF_CF7_MAX_VERSION', '6.0' );
+if (!defined('WPCF7CF_VERSION')) define( 'WPCF7CF_VERSION', '2.5.3' );
+if (!defined('WPCF7CF_CF7_MAX_VERSION')) define( 'WPCF7CF_CF7_MAX_VERSION', '6.0.1' );
 if (!defined('WPCF7CF_PLUGIN')) define( 'WPCF7CF_PLUGIN', __FILE__ );
 if (!defined('WPCF7CF_PLUGIN_BASENAME')) define( 'WPCF7CF_PLUGIN_BASENAME', plugin_basename( WPCF7CF_PLUGIN ) );
 if (!defined('WPCF7CF_PLUGIN_NAME')) define( 'WPCF7CF_PLUGIN_NAME', trim( dirname( WPCF7CF_PLUGIN_BASENAME ), '/' ) );
@@ -46,6 +46,7 @@ if (WPCF7CF_IS_PRO) {
     require_once WPCF7CF_PLUGIN_DIR.'/pro/pro-functions.php';
 }
 
+require_once WPCF7CF_PLUGIN_DIR.'/tg_pane_group.php';
 require_once WPCF7CF_PLUGIN_DIR.'/cf7cf.php';
 require_once WPCF7CF_PLUGIN_DIR.'/wpcf7cf-options.php';
 
