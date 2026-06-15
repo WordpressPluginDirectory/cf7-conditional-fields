@@ -5,8 +5,8 @@ Author: Jules Colle
 Website: http://bdwm.be
 Tags: contact form 7, forms, form, conditional fields, conditional logic
 Requires at least: 5.0
-Tested up to: 6.9
-Stable tag: 2.7.2
+Tested up to: 7.0
+Stable tag: 2.7.7
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -137,6 +137,21 @@ Because the nature of the changes introduced in version 5.7 of Contact Form 7 yo
 Reverted autop-fix because it was causing additional errors. Bottom line: Make sure you are om Conditional Fields version 2.2.11 and CF7 version 5.6.4
 
 == Changelog ==
+
+= 2.7.7 (2026-06-14) =
+* Fix validation errors when a group is hidden ([#137](https://github.com/pwkip/contact-form-7-conditional-fields/issues/137)). Thanks hirasso!
+
+= 2.7.6 (2026-05-28) =
+* PRO: Multistep buttons can now be changed per step.
+
+= 2.7.5 (2026-05-20) =
+* Tested up to WP 7.0
+
+= 2.7.4 (2026-05-15) =
+* Fully tested with Contact Form 7 version 6.1.6
+
+= 2.7.3 (2026-05-03) =
+* Security: Fix unauthenticated DoS via repeater `*_count` POST parameter. Thanks to Rahul Karne for the responsible disclosure via VulnCheck.
 
 = 2.7.2 (2026-05-01) =
 * PRO: Repeater - new `remove_button:per_entry` option to add a remove button to each entry. (Can also be set globally as the default in settings.)

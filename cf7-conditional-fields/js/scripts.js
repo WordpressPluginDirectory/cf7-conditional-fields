@@ -268,7 +268,8 @@ Wpcf7cfForm.prototype.displayFields = function() {
         }
     }
 
-    form.$groups.addClass('wpcf7cf-hidden');
+    // 'novalidate' makes CF7 skip inline validation inside hidden groups (issue #137)
+    form.$groups.addClass('wpcf7cf-hidden novalidate');
 
     for (let i=0; i < wpcf7cf_conditions.length; i++) {
 
@@ -277,7 +278,7 @@ Wpcf7cfForm.prototype.displayFields = function() {
         const show_group = window.wpcf7cf.should_group_be_shown(condition, form);
 
         if (show_group) {
-            form.get('[data-id="'+condition.then_field+'"]').removeClass('wpcf7cf-hidden');
+            form.get('[data-id="'+condition.then_field+'"]').removeClass('wpcf7cf-hidden novalidate');
         }
     }
 
@@ -664,6 +665,12 @@ window.wpcf7cf = {
         if (multistep.currentStep == 1) {
             multistep.$btn_prev.addClass('disabled').attr('disabled', true);
         }
+
+        const $current_step = multistep.$steps.eq(multistep.currentStep - 1);
+        const prev_text = $current_step.attr('data-prev-button-text');
+        const next_text = $current_step.attr('data-next-button-text');
+        if (prev_text !== undefined) multistep.$btn_prev.text(prev_text);
+        if (next_text !== undefined) multistep.$btn_next.text(next_text);
 
         // replace next button with submit button on last step.
         // TODO: make this depend on a setting
