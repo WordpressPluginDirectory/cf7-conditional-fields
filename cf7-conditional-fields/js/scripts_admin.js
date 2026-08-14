@@ -141,7 +141,7 @@ if (typeof(_wpcf7) != 'undefined' || typeof(wpcf7) != 'undefined') {
     }
     
     /**
-     * Tranform an array of conditions (Objects) to HTML fields
+     * Transform an array of conditions (Objects) to HTML fields
      * @param Array conditions 
      * @returns jQuery
      */
@@ -274,6 +274,11 @@ if (typeof(_wpcf7) != 'undefined' || typeof(wpcf7) != 'undefined') {
             } else if (operator.endsWith('(regex)')) {
                 $and_rule.find('.if-value').eq(0).autocomplete( "enable" );
             }
+            // offer a native date-picker when a [date] field is compared with a value-taking operator
+            var if_field = $and_rule.find('.if-field-select').eq(0).val();
+            var dateOperators = ['equals','not equals','greater than','greater than or equals','less than','less than or equals'];
+            var showDatePicker = wpcf7cf.fieldTypes && wpcf7cf.fieldTypes[if_field] === 'date' && dateOperators.includes(operator);
+            $and_rule.find('.if-value').eq(0).attr('type', showDatePicker ? 'date' : 'text');
         });
     
         scale_and_button();
@@ -355,6 +360,12 @@ if (typeof(_wpcf7) != 'undefined' || typeof(wpcf7) != 'undefined') {
     
         jQuery('.operator').on('change', (function() {
             updateDisplayOfEntries();
+            wpcf7cf.copyFieldsToText();
+            return false;
+        }));
+
+        jQuery('.if-field-select').off('change.wpcf7cfdate').on('change.wpcf7cfdate', (function() {
+            updateDisplayOfEntries(); // re-evaluate whether the value input should be a date-picker
             wpcf7cf.copyFieldsToText();
             return false;
         }));
@@ -473,14 +484,18 @@ if (typeof(_wpcf7) != 'undefined' || typeof(wpcf7) != 'undefined') {
 
     
     function scanFormTags(formCode) {
-        const fields = [...formCode.matchAll(/\[(?!group|step|repeater|submit)[^\] ]+ ([^\] ]+)/g)].map(e=>e[1]);
+        const fieldMatches = [...formCode.matchAll(/\[(?!group|step|repeater|submit)([^\]* ]+)\*? ([^\] ]+)/g)];
+        const fields = fieldMatches.map(e=>e[2]);
+        const fieldTypes = {}; // field name => tag type (e.g. 'date'), used to offer a date-picker
+        fieldMatches.forEach(e => { fieldTypes[e[2]] = e[1]; });
         const groups = [...formCode.matchAll(/\[group ([^\] ]+)/g)].map(e=>e[1]);
-        return [ fields, groups ];
+        return [ fields, groups, fieldTypes ];
     }
     
     function updateAvailableGroupsAndFields() {
         const formCode = wpcf7cf.$formEditor.val();
-        const [ fields, groups ] = scanFormTags(formCode);
+        const [ fields, groups, fieldTypes ] = scanFormTags(formCode);
+        wpcf7cf.fieldTypes = fieldTypes;
     
         $temp = jQuery(wpcf7cf.template_for_condition_fields_with_one_and_rule);
         $temp.find('.then-field-select').eq(0).html(createOptionsHTML(groups, 'group'));
@@ -556,7 +571,7 @@ if (typeof(_wpcf7) != 'undefined' || typeof(wpcf7) != 'undefined') {
     
         wpcf7cf.$if_values = jQuery('.if-value'); // gets updated now and then
     
-        // init HTML templates (will be updated immediatly by updateAvailableGroupsAndFields())
+        // init HTML templates (will be updated immediately by updateAvailableGroupsAndFields())
         wpcf7cf.template_for_condition_fields_with_one_and_rule = wpcf7cf.$newEntry[0].outerHTML;
         wpcf7cf.template_for_and_rule = wpcf7cf.$newEntry.find('.wpcf7cf-and-rule')[0] ? wpcf7cf.$newEntry.find('.wpcf7cf-and-rule')[0].outerHTML : '';
     
